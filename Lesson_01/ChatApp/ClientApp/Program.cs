@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ModelsLibrary.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -10,6 +12,8 @@ namespace ClientApp
     class Program
     {
         static Socket clientSocket;
+        static string username = "vas_2.0";
+
         static void Main(string[] args)
         {
             Console.Title = "-= CLIENT =-";
@@ -26,7 +30,7 @@ namespace ClientApp
                 // запуск прослушки сообщений от сервера
                 StartListening();
 
-                while(true)
+                while (true)
                 {
                     Console.Write("Enter your message: ");
                     string msg = Console.ReadLine();
@@ -45,6 +49,16 @@ namespace ClientApp
 
         static void SendMessage(string message)
         {
+            /*SimpleMessage msg = new SimpleMessage
+            {
+                Text = message,
+                From = username,
+                RemoteIP = clientSocket.RemoteEndPoint.ToString()
+            };
+
+            string json = JsonConvert.SerializeObject(msg);
+
+            clientSocket.Send(ConvertStringToBytes(json));*/
             clientSocket.Send(ConvertStringToBytes(message));
         }
 
@@ -52,7 +66,7 @@ namespace ClientApp
         {
             Task.Run(() =>
             {
-                while(true)
+                while (true)
                 {
                     byte[] buff = ReceiveMessage();
                     string message = ConvertBytesToString(buff);
