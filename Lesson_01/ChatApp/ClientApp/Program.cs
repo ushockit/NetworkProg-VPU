@@ -70,23 +70,11 @@ namespace ClientApp
         static byte[] ReceiveMessage()
         {
             const int BUFF_SIZE = 100;
+            byte[] buff = new byte[BUFF_SIZE];
 
-            int countReceiveBuffs = 0;
-            int countReceiveBytes = 0;
-            int totalReceiveBytes = 0;
-            List<byte> totalBytes = new List<byte>();
-            do
-            {
-                byte[] buff = new byte[BUFF_SIZE];
-                countReceiveBytes = clientSocket.Receive(buff);
-                totalReceiveBytes += countReceiveBytes;
-                totalBytes.AddRange(buff);
+            clientSocket.Receive(buff);
 
-                countReceiveBuffs++;
-            } while (countReceiveBytes > 0);
-
-            totalBytes.RemoveRange(totalReceiveBytes, BUFF_SIZE * countReceiveBuffs - totalReceiveBytes);
-            return totalBytes.ToArray();
+            return buff;
         }
 
         static byte[] ConvertStringToBytes(string str)
